@@ -41,7 +41,9 @@ function Login() {
 
                     <p className="text-pink-400">
                         Ainda não tem uma conta?{' '}
-                        <Link to="/cadastro">Cadastre-se</Link>
+                        <Link to="/cadastro" className="text-pink-400 hover:underline">
+                        Cadastre-se
+                        </Link>
                     </p>
                 </form>
                 <div className="fundoLogin hidden lg:block"></div>
