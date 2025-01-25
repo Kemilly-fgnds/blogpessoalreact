@@ -1,6 +1,8 @@
-import { Chats } from '@phosphor-icons/react'
+import ListaPostagens from "../../components/postagens/listapostagens/ListaPostagens"
+import ModalPostagem from "../../components/postagens/modalpostagem/ModalPostagem"
 
 function Home() {
+
     return (
         <>
             <div className="bg-gray-200 flex justify-center">
@@ -14,11 +16,9 @@ function Home() {
                         </p>
 
                         <div className="flex justify-around gap-4">
-                            <div className='flex items-center gap-2 rounded text-amber-700 
-                                            border-amber-600 border-solid border-2 py-2 px-4 hover:bg-pink-200 font-bold'
+                            <div
                             >
-                                <Chats size={25} weight='bold' />
-                                Nova Postagem
+                                <ModalPostagem />
                             </div>
                         </div>
                     </div>
@@ -32,6 +32,7 @@ function Home() {
                     </div>
                 </div>
             </div>
+            <ListaPostagens />
         </>
     )
 }

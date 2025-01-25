@@ -1,26 +1,26 @@
 import { useState, useContext, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { AuthContext } from "../../../contexts/AuthContext"
-import Tema from "../../../models/Tema"
+import Postagem from "../../../models/Postagem"
 import { buscar, deletar } from "../../../services/Service"
 import { RotatingLines } from "react-loader-spinner"
 import { ToastAlerta } from "../../../utils/ToastAlerta"
 
-function DeletarTema() {
+function DeletarPostagem() {
 
     const navigate = useNavigate()
 
-    const [tema, setTema] = useState<Tema>({} as Tema)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [postagem, setPostagem] = useState<Postagem>({} as Postagem)
+
+    const { id } = useParams<{ id: string }>()
 
     const { usuario, handleLogout } = useContext(AuthContext)
     const token = usuario.token
 
-    const { id } = useParams<{ id: string }>()
-
     async function buscarPorId(id: string) {
         try {
-            await buscar(`/temas/${id}`, setTema, {
+            await buscar(`/postagens/${id}`, setPostagem, {
                 headers: {
                     'Authorization': token
                 }
@@ -45,23 +45,23 @@ function DeletarTema() {
         }
     }, [id])
 
-    async function deletarTema() {
+    async function deletarPostagem() {
         setIsLoading(true)
 
         try {
-            await deletar(`/temas/${id}`, {
+            await deletar(`/postagens/${id}`, {
                 headers: {
                     'Authorization': token
                 }
             })
 
-            ToastAlerta("Tema excluído com sucesso!", "sucesso")
+            ToastAlerta("Postagem apagada com sucesso", "sucesso")
 
         } catch (error: any) {
             if (error.toString().includes('403')) {
                 handleLogout()
             } else {
-                ToastAlerta("Erro ao deletar o tema.", "erro")
+                ToastAlerta("Erro ao deletar a postagem.", "erro")
             }
         }
 
@@ -70,20 +70,26 @@ function DeletarTema() {
     }
 
     function retornar() {
-        navigate("/temas")
+        navigate("/postagens")
     }
 
     return (
         <div className='container w-1/3 mx-auto'>
-            <h1 className='text-4xl text-center my-4 text-pink-500'>Deletar Tema</h1>
+            <h1 className='text-4xl text-center my-4 text-pink-500'>Deletar Postagem</h1>
+
             <p className='text-center font-semibold mb-4 text-pink-600'>
-                Você tem certeza de que deseja apagar o tema a seguir?</p>
+                Você tem certeza de que deseja apagar a postagem a seguir?
+            </p>
+
             <div className='border flex flex-col rounded-2xl overflow-hidden justify-between'>
                 <header
                     className='py-2 px-6 bg-pink-200 text-amber-700 font-bold text-2xl'>
-                    Tema
+                    Postagem
                 </header>
-                <p className='p-8 text-3xl bg-slate-200 h-full italic'>{tema.descricao}</p>
+                <div className="p-4 bg-slate-200 italic">
+                    <p className='text-xl h-full'>{postagem.titulo}</p>
+                    <p>{postagem.texto}</p>
+                </div>
                 <div className="flex">
                     <button
                         className='text-slate-100 bg-pink-500 hover:bg-pink-600 w-full py-2'
@@ -93,7 +99,8 @@ function DeletarTema() {
                     <button
                         className='w-full text-slate-100 bg-cyan-500 
                                    hover:bg-cyan-600 flex items-center justify-center'
-                        onClick={deletarTema}>
+                        onClick={deletarPostagem}>
+
                         {isLoading ?
                             <RotatingLines
                                 strokeColor="white"
@@ -110,4 +117,5 @@ function DeletarTema() {
         </div>
     )
 }
-export default DeletarTema
+
+export default DeletarPostagem
